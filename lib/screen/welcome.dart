@@ -1,5 +1,5 @@
-import "dart:js_interop";
 
+import 'package:animations/animations.dart';
 import "package:fiutter_bloc/bloc/welcome_bloc.dart";
 import "package:fiutter_bloc/bloc/welcome_event.dart";
 import "package:fiutter_bloc/bloc/welcome_state.dart";
@@ -15,6 +15,7 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
+PageController pageController=PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,18 +29,20 @@ class _WelcomeState extends State<Welcome> {
          child: Stack(
            children:[
            PageView(
+            controller: pageController,
             onPageChanged: (index){
-              index=state.page;
+            state.page= index;
+              print(index);
         BlocProvider.of<WelcomeBloc>(context).add(WelcomeEvent());
             },
             children: [
-           _weight(context,
+           _weight(0,context,
          Image.asset('assets/images/boy.png'),
         
          "First see learning","Forget about poor marks in paper here you practice you difficult subject","Get Started"
            ),
-           _weight(context, Image.asset("assets/images/man.png"), "First see learning","Forget about poor marks in paper here you practice you difficult subject","Get Started"),
-           _weight(context, Image.asset("assets/images/reading.png"), "First see learning","Forget about poor marks in paper here you practice you difficult subject","Get Started"),
+           _weight(1,context, Image.asset("assets/images/man.png"), "First see learning","Forget about poor marks in paper here you practice you difficult subject","Get Started"),
+           _weight(2,context, Image.asset("assets/images/reading.png"), "First see learning","Forget about poor marks in paper here you practice you difficult subject","Get Started"),
           
             ],
            ),
@@ -60,7 +63,7 @@ class _WelcomeState extends State<Welcome> {
       ),
     );
   }
-  _weight(BuildContext context ,Image Image,String title,String subtitle,String buttonText){
+  _weight(int index  ,BuildContext context ,Image Image,String title,String subtitle,String buttonText){
  return  Column(
    children: [
        Image,
@@ -73,7 +76,13 @@ class _WelcomeState extends State<Welcome> {
      ),
       SizedBox(height: 50.h,),
       GestureDetector(
-        onTap: (){},
+        onTap: (){
+          if(index<2){
+            pageController.animateToPage(index + 1, duration: const Duration(microseconds:5000), curve: Curves.decelerate);
+          }else{
+         
+          }
+        },
         child: Container(
           width: 325.w,
           height: 50.h,
